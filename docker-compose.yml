@@ -1,0 +1,16 @@
+services:
+  fredrik:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fredrik-bot
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./session:/app/session
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production

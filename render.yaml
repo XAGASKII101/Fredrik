@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: fredrik-bot
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: BOT_NAME
+        value: Fredrik
+      - key: PREFIX
+        value: .
+      - key: MODE
+        value: public
+      - key: OWNER_NUMBER
+        value: auto
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
+      - key: SESSION_ID
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
