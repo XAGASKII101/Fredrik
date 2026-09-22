@@ -1,5 +1,5 @@
 # Multi-stage production Dockerfile for Fredrik Bot
-FROM node:20-bullseye-slim AS builder
+FROM node:20-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     git \
     ffmpeg \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json tsconfig.json ./
@@ -19,12 +20,13 @@ COPY . .
 RUN npm run build
 
 # Production runner image
-FROM node:20-bullseye-slim AS runner
+FROM node:20-bookworm-slim AS runner
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
+    python3 \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
