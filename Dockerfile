@@ -34,9 +34,10 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/scripts ./scripts 2>/dev/null || true
 COPY --from=builder /app/data ./data 2>/dev/null || true
 
 # Pre-create session and data directory
