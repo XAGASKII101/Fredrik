@@ -37,8 +37,7 @@ COPY package*.json ./
 RUN npm install --omit=dev && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/scripts ./scripts 2>/dev/null || true
-COPY --from=builder /app/data ./data 2>/dev/null || true
+COPY --from=builder /app/scripts ./scripts
 
 # Pre-create session and data directory
 RUN mkdir -p session data
