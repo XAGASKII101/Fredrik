@@ -2,14 +2,13 @@
 FROM node:20-bookworm-slim AS builder
 
 WORKDIR /app
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install native dependencies and build essentials
+# Install build essentials for native addons
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     make \
     g++ \
-    git \
-    ffmpeg \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,15 +22,16 @@ RUN npm run build
 FROM node:20-bookworm-slim AS runner
 
 WORKDIR /app
+ENV DEBIAN_FRONTEND=noninteractive
+ENV NODE_ENV=production
+ENV PORT=3000
 
+# Install runtime dependencies (FFmpeg & Python)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     python3 \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-
-ENV NODE_ENV=production
-ENV PORT=3000
 
 COPY package*.json ./
 RUN npm install --omit=dev && npm cache clean --force
